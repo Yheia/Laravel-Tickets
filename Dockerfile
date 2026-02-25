@@ -5,7 +5,7 @@ WORKDIR /var/www
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git curl zip unzip libpng-dev libonig-dev libxml2-dev \
-    libzip-dev libpq-dev libicu-dev pkg-config g++ make autoconf 
+    libzip-dev libpq-dev libicu-dev pkg-config g++ make autoconf
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip intl
@@ -15,7 +15,3 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy project
 COPY . .
 
-# Install Laravel dependencies
-RUN composer install --no-interaction --prefer-dist
-
-CMD ["php-fpm"]
