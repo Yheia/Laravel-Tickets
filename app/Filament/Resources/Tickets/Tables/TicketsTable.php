@@ -9,7 +9,9 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\ExportAction;
 use Filament\Tables\Filters\SelectFilter;
+use App\Filament\Exports\TicketExporter;
 
 class TicketsTable
 {
@@ -69,6 +71,12 @@ class TicketsTable
                     'high' => 'High',
                 ])->multiple(),
             ])
+            ->headerActions([
+               ExportAction::make('export')
+                    ->label('Export Tickets')
+                    ->icon('heroicon-o-document-arrow-up')
+                    ->exporter(TicketExporter::class),
+            ])
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make()->visible(fn ($record) => auth()->user()->isSupervisor()),
@@ -76,6 +84,10 @@ class TicketsTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    ExportAction::make('export')
+                    ->label('Export Tickets')
+                    ->icon('heroicon-o-document-arrow-up')
+                    ->exporter(TicketExporter::class),
                 ]),
             ]);
     }

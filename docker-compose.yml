@@ -6,10 +6,7 @@ services:
     restart: unless-stopped
     working_dir: /var/www
     volumes:
-      - .:/var/www
-    command: >
-      sh -c "composer install --no-interaction --prefer-dist"
-      sh -c "php-fpm"
+      - tickets_app:/var/www
     depends_on:
       - db
 
@@ -20,8 +17,8 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - .:/var/www
       - ./docker/nginx:/etc/nginx/conf.d
+      - tickets_app:/var/www   # <-- share Laravel files
     depends_on:
       - app
 
@@ -51,3 +48,4 @@ services:
 
 volumes:
   dbdata:
+  tickets_app:

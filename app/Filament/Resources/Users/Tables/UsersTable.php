@@ -10,6 +10,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ExportAction;
+use Filament\Actions\ExportBulkAction;
 
 class UsersTable
 {
@@ -53,7 +54,13 @@ class UsersTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    ExportBulkAction::make('export')
+                    ->label('Export Selected')
+                    ->icon('heroicon-o-document-arrow-up')
+                    ->exporter(ExportsUserExporter::class),
+
                 ]),
+                
             ]);
     }
 }
