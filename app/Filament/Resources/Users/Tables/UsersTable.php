@@ -37,6 +37,8 @@ class UsersTable
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('role')
                     ->searchable(),
+                TextColumn::make('sector')
+                    ->searchable(),
             ])
             ->filters([
                 //

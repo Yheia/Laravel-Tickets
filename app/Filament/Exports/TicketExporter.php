@@ -24,6 +24,7 @@ class TicketExporter extends Exporter
             ExportColumn::make('priority')->label('Priority'),
             ExportColumn::make('created_at')->label('Created At'),
             ExportColumn::make('updated_at')->label('Updated At'),
+            ExportColumn::make('sector')->label('Sector'),
             
         ];
     }

@@ -12,7 +12,7 @@ class TicketPolicy
    
     public function view(User $user, Ticket $ticket): bool
     {
-        return $user->isSupervisor() || $user->id === $ticket->user_id || $user->id === $ticket->assigned_to;
+        return $user->isSupervisor() || $user->id === $ticket->user_id || $user->id === $ticket->assigned_to || ($user->isSectoradmin() && $user->sector === $ticket->sector);
     }
 
     /**
@@ -36,7 +36,7 @@ class TicketPolicy
      */
     public function delete(User $user, Ticket $ticket): bool
     {
-        return $user->isSupervisor();
+        return $user->isSupervisor() || ($user->isSectoradmin() && $user->sector === $ticket->sector);
     }
 
 

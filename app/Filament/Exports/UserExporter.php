@@ -22,6 +22,7 @@ class UserExporter extends Exporter
             ExportColumn::make('created_at')->label('Created At'),
             ExportColumn::make('updated_at')->label('Updated At'),
             ExportColumn::make('role')->label('Role'),
+            ExportColumn::make('sector')->label('Sector'),
         ];
     }
 

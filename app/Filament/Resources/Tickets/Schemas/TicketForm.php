@@ -26,7 +26,7 @@ class TicketForm
                 //     ->dehydrated(true),
                 Select::make('assigned_to')
                     ->relationship('assignedSupport', 'name')
-                    ->visible(fn () => auth()->user()->isSupervisor())
+                    ->visible(fn () => auth()->user()->isSupervisor() || auth()->user()->isSectoradmin()) 
                     ->searchable()
                     ->default(null),
                 TextInput::make('title')
@@ -36,21 +36,25 @@ class TicketForm
                 Textarea::make('description')
                     ->required()
                     ->columnSpanFull()
-                    ->rules(['min:100', 'max:1000']),
+                    ->rules(['min:75', 'max:1000']),
                 FileUpload::make('image')
                     ->image()->imagePreviewHeight('200')
                     ->maxSize(4096) // 4MB
                     ->downloadable()
                     ->openable(),
+                Select::make('sector')
+                    ->options(['Network and Infrastructure' => 'Network and Infrastructure', 'Portal and site' => 'Portal and site', 'Complain' => 'Complain','general' => 'General'])
+                    ->default('general')
+                    ->required(),
                 Select::make('status')
                     ->options(['open' => 'Open', 'in_progress' => 'In progress', 'closed' => 'Closed'])
                     ->default('open')
-                    ->visible(fn () => auth()->user()->isSupport() || auth()->user()->isSupervisor())
+                    ->visible(fn () => auth()->user()->isSupport() || auth()->user()->isSupervisor() || auth()->user()->isSectoradmin())
                     ->required(),
                 Select::make('priority')
                     ->options(['low' => 'Low', 'medium' => 'Medium', 'high' => 'High'])
                     ->default('medium')
-                    ->visible(fn () => auth()->user()->isSupervisor())
+                    ->visible(fn () => auth()->user()->isSupervisor() || auth()->user()->isSectoradmin())
                     ->required(),
             ]);
     }

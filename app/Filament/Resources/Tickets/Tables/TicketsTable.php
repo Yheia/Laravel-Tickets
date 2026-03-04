@@ -30,6 +30,14 @@ class TicketsTable
                 TextColumn::make('title')
                     ->searchable(),
                 ImageColumn::make('image'),
+                TextColumn::make('sector')
+                    ->badge()->color(fn ($state) => match ($state) {
+                        'Network and Infrastructure' => 'primary',
+                        'Portal and site' => 'info',
+                        'Complain' => 'warning',
+                        'general' => 'secondary',
+                        default => 'null',
+                    }),
                 TextColumn::make('status')
                     ->badge()->color(fn ($state) => match ($state) {
                         'open' => 'danger',
@@ -62,6 +70,15 @@ class TicketsTable
                     'closed' => 'Closed',
                 ])->multiple(),
 
+                selectFilter::make('sector')
+                ->label('sector')
+                ->options([
+                    'Network and Infrastructure' => 'Network and Infrastructure',
+                    'Portal and site' => 'Portal and site',
+                    'Complain' => 'Complain',
+                    'general' => 'General',
+                ])->multiple(),
+
             // Priority Filter
             SelectFilter::make('priority')
                 ->label('priority') 
@@ -79,7 +96,7 @@ class TicketsTable
             ])
             ->recordActions([
                 EditAction::make(),
-                DeleteAction::make()->visible(fn ($record) => auth()->user()->isSupervisor()),
+                DeleteAction::make()->visible(fn ($record) => auth()->user()->isSupervisor() || auth()->user()->isSectoradmin()) ,
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

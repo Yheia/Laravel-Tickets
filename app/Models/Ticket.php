@@ -15,6 +15,7 @@ class Ticket extends Model
         'image',
         'status',
         'priority',
+        'sector',
     ];
 
 

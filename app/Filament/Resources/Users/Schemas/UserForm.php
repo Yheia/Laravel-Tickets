@@ -11,6 +11,28 @@ class UserForm
 {
     public static function configure(Schema $schema): Schema
     {
+
+
+         $user = auth()->user(); 
+
+        
+        $roleOptions = [
+            'user' => 'User',
+            'support' => 'Support',
+            'supervisor' => 'Supervisor',
+            'sectoradmin' => 'Sector Admin',
+        ];
+
+        if ($user->isSectoradmin()) {
+            
+            $roleOptions = [
+                'user' => 'User',
+                'support' => 'Support',
+            ];
+        }
+
+
+
         return $schema
             ->components([
                 TextInput::make('name')
@@ -23,11 +45,17 @@ class UserForm
                     ->password()
                     ->required(),
                 Select::make('role')
+                    ->options($roleOptions)
+                    ->required(),
+                Select::make('sector')
                     ->options([
-                        'user' => 'User',
-                        'support' => 'Support',
-                        'supervisor' => 'Supervisor',
+                        'Network and Infrastructure' => 'Network and Infrastructure',
+                        'Portal and site' => 'Portal and site',
+                        'Complain' => 'Complain',
+                        'general' => 'General',
                     ])
+                    ->default(fn () => $user->isSectoradmin() ? $user->sector : null)
+                    ->disabled(fn () => $user->isSectoradmin())
                     ->required(),
                                   
             ]);

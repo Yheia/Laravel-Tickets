@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 
 class UserResource extends Resource
@@ -33,8 +34,24 @@ class UserResource extends Resource
 
     public static function canViewAny(): bool
     {
-    return auth()->user()->isSupervisor();
+    return auth()->user()->isSupervisor() || (auth()->user()->isSectoradmin() );
     }
+
+public static function getEloquentQuery(): Builder
+{
+    $query = parent::getEloquentQuery();
+    $user = auth()->user();
+
+    if ($user->isSupervisor()) {
+        return $query;
+    }
+
+    if ($user->isSectoradmin()) {
+        return $query->where('sector', $user->sector);
+    }
+    return $query->where('id', $user->id);
+}
+
 
 
     public static function getRelations(): array

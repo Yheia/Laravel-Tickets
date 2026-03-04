@@ -43,6 +43,9 @@ class TicketResource extends Resource
         return $query;
     }
 
+    if ($user->isSectoradmin()) {
+        return $query->where('sector', $user->sector || 'sector' , 'general');
+    }
    
     if ($user->isSupport()) {
        return $query->where('assigned_to', $user->id);
