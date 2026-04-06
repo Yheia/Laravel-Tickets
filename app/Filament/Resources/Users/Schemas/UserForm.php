@@ -11,6 +11,32 @@ class UserForm
 {
     public static function configure(Schema $schema): Schema
     {
+<<<<<<< Updated upstream
+=======
+
+
+         $user = auth()->user(); 
+
+        
+        $roleOptions = [
+            'user' => 'User',
+            'support' => 'Support',
+            'supervisor' => 'Supervisor',
+            'sectoradmin' => 'Sector Admin',
+        ];
+
+        if ($user->isSectoradmin()) {
+            
+            $roleOptions = [
+                'user' => 'User',
+                'support' => 'Support',
+                'sectoradmin' => 'Sector Admin',
+            ];
+        }
+
+
+
+>>>>>>> Stashed changes
         return $schema
             ->components([
                 TextInput::make('name')
@@ -28,7 +54,14 @@ class UserForm
                         'support' => 'Support',
                         'supervisor' => 'Supervisor',
                     ])
+<<<<<<< Updated upstream
                     ->required(),
+=======
+                    ->default(fn () => $user->isSectoradmin() ? $user->sector : null)
+                    ->disabled(fn () => $user->isSectoradmin())
+                    ->required()
+                    ->dehydrated(),
+>>>>>>> Stashed changes
                                   
             ]);
     }
