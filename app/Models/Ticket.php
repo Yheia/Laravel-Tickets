@@ -15,11 +15,9 @@ class Ticket extends Model
         'image',
         'status',
         'priority',
-<<<<<<< Updated upstream
-=======
         'sector',
         'faculty',
->>>>>>> Stashed changes
+
     ];
 
 
