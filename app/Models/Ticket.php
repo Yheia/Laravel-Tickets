@@ -16,6 +16,7 @@ class Ticket extends Model
         'status',
         'priority',
         'sector',
+        'faculty',
     ];
 
 

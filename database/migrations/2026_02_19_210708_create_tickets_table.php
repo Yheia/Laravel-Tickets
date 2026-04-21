@@ -21,6 +21,23 @@ return new class extends Migration
             $table->enum('sector', ['Network and Infrastructure', 'Portal and site', 'Complain','general'])->default('general');
             $table->enum('status', ['open', 'in_progress', 'closed'])->default('open');
             $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
+            $table->enum('faculty', [
+                'Faculty of Education',
+                'Faculty of Agriculture',
+                'Faculty of Arts',
+                'Faculty of Commerce',
+                'Faculty of Nursing',
+                'Faculty of Science',
+                'Faculty of Pharmacy',
+                'Faculty of Veterinary Medicine',
+                'Faculty of Early Childhood Education',
+                'Faculty of Special Education',
+                'Faculty of Computers and Information',
+                'Faculty of engineering',
+                'Faculty of Applied Arts',
+                'institute of graduate studies and environmental research',
+                'Other'
+            ])->default('Other');
             $table->timestamps();
         });
     }

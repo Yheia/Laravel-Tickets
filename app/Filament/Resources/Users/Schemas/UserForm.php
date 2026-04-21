@@ -13,9 +13,12 @@ class UserForm
     {
 
 
+
+
+
          $user = auth()->user(); 
 
-        
+
         $roleOptions = [
             'user' => 'User',
             'support' => 'Support',
@@ -24,15 +27,17 @@ class UserForm
         ];
 
         if ($user->isSectoradmin()) {
-            
+
             $roleOptions = [
                 'user' => 'User',
                 'support' => 'Support',
+                'sectoradmin' => 'Sector Admin',
             ];
         }
 
 
 
+        
         return $schema
             ->components([
                 TextInput::make('name')
@@ -47,8 +52,8 @@ class UserForm
                 Select::make('role')
                     ->options($roleOptions)
                     ->required(),
-                Select::make('sector')
-                    ->options([
+                  Select::make('sector')
+                     ->options([
                         'Network and Infrastructure' => 'Network and Infrastructure',
                         'Portal and site' => 'Portal and site',
                         'Complain' => 'Complain',
@@ -56,8 +61,9 @@ class UserForm
                     ])
                     ->default(fn () => $user->isSectoradmin() ? $user->sector : null)
                     ->disabled(fn () => $user->isSectoradmin())
-                    ->required(),
-                                  
+                    ->required()
+                    ->dehydrated(),
+
             ]);
     }
 }

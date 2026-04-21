@@ -51,6 +51,27 @@ class TicketForm
                     ->default('open')
                     ->visible(fn () => auth()->user()->isSupport() || auth()->user()->isSupervisor() || auth()->user()->isSectoradmin())
                     ->required(),
+                                    Select::make('faculty')
+                    ->options([
+                        'Faculty of Education',
+                        'Faculty of Agriculture',
+                        'Faculty of Arts',
+                        'Faculty of Commerce',
+                        'Faculty of Nursing',
+                        'Faculty of Science',
+                        'Faculty of Pharmacy',
+                        'Faculty of Veterinary Medicine',
+                        'Faculty of Early Childhood Education',
+                        'Faculty of Special Education',
+                        'Faculty of Computers and Information',
+                        'Faculty of engineering',
+                        'Faculty of Applied Arts',
+                        'institute of graduate studies and environmental research',
+                        'Other'
+            ])
+                    ->default('Other')
+                    ->required()
+                    ->searchable(),
                 Select::make('priority')
                     ->options(['low' => 'Low', 'medium' => 'Medium', 'high' => 'High'])
                     ->default('medium')

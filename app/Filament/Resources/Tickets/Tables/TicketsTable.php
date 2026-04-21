@@ -52,6 +52,11 @@ class TicketsTable
                         'high' => 'danger',
                         default => null,
                     }),
+                TextColumn::make('faculty')
+                    ->label('Faculty')
+                    ->searchable()
+                    ->sortable()
+                    ->default('Other'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
