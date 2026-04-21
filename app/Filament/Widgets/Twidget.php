@@ -14,6 +14,16 @@ class Twidget extends StatsOverviewWidget
 
     protected int|string|array $columnSpan = 'full';
 
+
+    public static function canView(): bool
+    {
+    $user = auth()->user();
+
+    return $user && (
+        $user->isSupervisor() || $user->isSectoradmin() || $user->isSupport()
+    );
+    }
+
     protected function getStats(): array
     {
         $user = auth()->user();
