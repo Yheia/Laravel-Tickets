@@ -11,59 +11,52 @@ class UserForm
 {
     public static function configure(Schema $schema): Schema
     {
-
-
-
-
-
-         $user = auth()->user(); 
-
+        $user = auth()->user(); 
 
         $roleOptions = [
-            'user' => 'User',
-            'support' => 'Support',
-            'supervisor' => 'Supervisor',
-            'sectoradmin' => 'Sector Admin',
+            'user'        => __('User'),
+            'support'     => __('Support'),
+            'supervisor'  => __('Supervisor'),
+            'sectoradmin' => __('Sector Admin'),
         ];
 
         if ($user->isSectoradmin()) {
-
             $roleOptions = [
-                'user' => 'User',
-                'support' => 'Support',
-                'sectoradmin' => 'Sector Admin',
+                'user'        => __('User'),
+                'support'     => __('Support'),
+                'sectoradmin' => __('Sector Admin'),
             ];
         }
 
-
-
-        
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label(__('Name'))
                     ->required(),
                 TextInput::make('email')
-                    ->label('Email address')
+                    ->label(__('Email Address'))
                     ->email()
                     ->required(),
                 TextInput::make('password')
+                    ->label(__('Password'))
                     ->password()
                     ->required(),
                 Select::make('role')
+                    ->label(__('Role'))
                     ->options($roleOptions)
                     ->required(),
-                  Select::make('sector')
-                     ->options([
-                        'Network and Infrastructure' => 'Network and Infrastructure',
-                        'Portal and site' => 'Portal and site',
-                        'Complain' => 'Complain',
-                        'general' => 'General',
+                Select::make('sector')
+                    ->label(__('Sector'))
+                    ->options([
+                        'Network and Infrastructure' => __('Network and Infrastructure'),
+                        'Portal and site'            => __('Portal and site'),
+                        'Complain'                   => __('Complain'),
+                        'general'                    => __('General'),
                     ])
                     ->default(fn () => $user->isSectoradmin() ? $user->sector : null)
                     ->disabled(fn () => $user->isSectoradmin())
                     ->required()
                     ->dehydrated(),
-
             ]);
     }
 }

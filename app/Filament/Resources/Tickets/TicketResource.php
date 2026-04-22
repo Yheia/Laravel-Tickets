@@ -20,8 +20,23 @@ class TicketResource extends Resource
 {
     protected static ?string $model = Ticket::class;
     protected static ?string $recordTitleAttribute = 'priority';
-
     protected static string|BackedEnum|null $navigationIcon = "heroicon-o-ticket";
+
+    // ✅ These three control the sidebar and page titles
+    public static function getNavigationLabel(): string
+    {
+        return __('Tickets');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Ticket');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Tickets');
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -35,40 +50,35 @@ class TicketResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-    $query = parent::getEloquentQuery();
-    $user = auth()->user();
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
 
-   
-    if ($user->isSupervisor()) {
-        return $query;
-    }
+        if ($user->isSupervisor()) {
+            return $query;
+        }
 
-    if ($user->isSectoradmin()) {
-        return $query->where('sector', $user->sector || 'sector' , 'general');
-    }
-   
-    if ($user->isSupport()) {
-       return $query->where('assigned_to', $user->id);
-    }
+        if ($user->isSectoradmin()) {
+            return $query->where('sector', $user->sector || 'sector', 'general');
+        }
 
-   
-    return $query->where('user_id', $user->id);
-    }
+        if ($user->isSupport()) {
+            return $query->where('assigned_to', $user->id);
+        }
 
+        return $query->where('user_id', $user->id);
+    }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ListTickets::route('/'),
+            'index'  => ListTickets::route('/'),
             'create' => CreateTicket::route('/create'),
-            'edit' => EditTicket::route('/{record}/edit'),
+            'edit'   => EditTicket::route('/{record}/edit'),
         ];
     }
 }

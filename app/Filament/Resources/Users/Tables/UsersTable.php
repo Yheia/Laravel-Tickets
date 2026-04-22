@@ -19,33 +19,41 @@ class UsersTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('Name'))
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label(__('Email Address'))
                     ->searchable(),
                 TextColumn::make('email_verified_at')
+                    ->label(__('Email Verified At'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
+                    ->label(__('Created At'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label(__('Updated At'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('role')
-                    ->searchable(),
+                    ->label(__('Role'))
+                    ->searchable()
+                    ->formatStateUsing(fn ($state) => __($state)),
                 TextColumn::make('sector')
-                    ->searchable(),
+                    ->label(__('Sector'))
+                    ->searchable()
+                    ->formatStateUsing(fn ($state) => __($state)),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
                 ExportAction::make('export')
-                    ->label('Export Users')
+                    ->label(__('Export Users'))
                     ->icon('heroicon-o-document-arrow-up')
                     ->exporter(ExportsUserExporter::class),
             ])
@@ -57,12 +65,10 @@ class UsersTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     ExportBulkAction::make('export')
-                    ->label('Export Selected')
-                    ->icon('heroicon-o-document-arrow-up')
-                    ->exporter(ExportsUserExporter::class),
-
+                        ->label(__('Export Selected'))
+                        ->icon('heroicon-o-document-arrow-up')
+                        ->exporter(ExportsUserExporter::class),
                 ]),
-                
             ]);
     }
 }

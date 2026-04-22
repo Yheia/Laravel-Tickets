@@ -14,14 +14,13 @@ class Twidget extends StatsOverviewWidget
 
     protected int|string|array $columnSpan = 'full';
 
-
     public static function canView(): bool
     {
-    $user = auth()->user();
+        $user = auth()->user();
 
-    return $user && (
-        $user->isSupervisor() || $user->isSectoradmin() || $user->isSupport()
-    );
+        return $user && (
+            $user->isSupervisor() || $user->isSectoradmin() || $user->isSupport()
+        );
     }
 
     protected function getStats(): array
@@ -30,7 +29,6 @@ class Twidget extends StatsOverviewWidget
         $start = $this->filters['startDate'] ?? null;
         $end = $this->filters['endDate'] ?? null;
 
-       
         $ticketQuery = fn () => Ticket::query()
             ->when($start, fn ($q) => $q->whereDate('created_at', '>=', $start))
             ->when($end, fn ($q) => $q->whereDate('created_at', '<=', $end))
@@ -38,50 +36,47 @@ class Twidget extends StatsOverviewWidget
 
         $stats = [];
 
-        // Tickets stats 
         if ($user->isSupervisor() || $user->isSectoradmin() || $user->isSupport()) {
-            $stats[] = Stat::make('Total Tickets', $ticketQuery()->count())
-                ->description('All tickets in the system')
+            $stats[] = Stat::make(__('Total Tickets'), $ticketQuery()->count())
+                ->description(__('All tickets in the system'))
                 ->icon('heroicon-o-ticket')
                 ->color('primary');
 
-            $stats[] = Stat::make('Open Tickets', $ticketQuery()->where('status','open')->count())
-                ->description('Open tickets')
+            $stats[] = Stat::make(__('Open Tickets'), $ticketQuery()->where('status', 'open')->count())
+                ->description(__('Open tickets'))
                 ->icon('heroicon-o-exclamation-triangle')
                 ->color('danger');
 
-            $stats[] = Stat::make('In Progress Tickets', $ticketQuery()->where('status','in_progress')->count())
-                ->description('Tickets in progress')
+            $stats[] = Stat::make(__('In Progress Tickets'), $ticketQuery()->where('status', 'in_progress')->count())
+                ->description(__('Tickets in progress'))
                 ->icon('heroicon-o-cog')
                 ->color('warning');
 
-            $stats[] = Stat::make('Closed Tickets', $ticketQuery()->where('status','closed')->count())
-                ->description('Closed tickets')
+            $stats[] = Stat::make(__('Closed Tickets'), $ticketQuery()->where('status', 'closed')->count())
+                ->description(__('Closed tickets'))
                 ->icon('heroicon-o-check-circle')
                 ->color('success');
         }
 
-        // Users/support stats
         if ($user->isSupervisor()) {
-            $stats[] = Stat::make('Support Team', User::where('role','support')->count())
-                ->description('Total support team members')
+            $stats[] = Stat::make(__('Support Team'), User::where('role', 'support')->count())
+                ->description(__('Total support team members'))
                 ->icon('heroicon-o-users')
                 ->color('secondary');
 
-            $stats[] = Stat::make('Users', User::where('role','user')->count())
-                ->description('Total users')
+            $stats[] = Stat::make(__('Users'), User::where('role', 'user')->count())
+                ->description(__('Total users'))
                 ->icon('heroicon-o-user')
                 ->color('primary');
-                
+
         } elseif ($user->isSectoradmin() || $user->isSupport()) {
-            // Only count users/support in their sector
-            $stats[] = Stat::make('Support Team', User::where('role','support')->where('sector', $user->sector)->count())
-                ->description('Support team members in your sector')
+            $stats[] = Stat::make(__('Support Team'), User::where('role', 'support')->where('sector', $user->sector)->count())
+                ->description(__('Support team members in your sector'))
                 ->icon('heroicon-o-users')
                 ->color('secondary');
 
-            $stats[] = Stat::make('Users', User::where('role','user')->where('sector', $user->sector)->count())
-                ->description('Users in your sector')
+            $stats[] = Stat::make(__('Users'), User::where('role', 'user')->where('sector', $user->sector)->count())
+                ->description(__('Users in your sector'))
                 ->icon('heroicon-o-user')
                 ->color('primary');
         }

@@ -8,6 +8,8 @@
     "require": {
         "php": "^8.2",
         "filament/filament": "^5.2",
+        "laravel-lang/lang": "^15.29",
+        "laravel-lang/publisher": "^16.8",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1"
     },

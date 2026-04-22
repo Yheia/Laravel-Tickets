@@ -9,8 +9,18 @@ use Filament\Resources\Pages\ListRecords;
 class ListTickets extends ListRecords
 {
     protected static string $resource = TicketResource::class;
-    protected ?string $heading = 'Tickets';
-    protected ?string $subheading = 'Manage The Support Tickets Here';
+
+
+    public function getHeading(): string
+    {
+        return __('Tickets');
+    }
+
+    public function getSubheading(): ?string
+    {
+        return __('Manage The Support Tickets Here');
+    }
+
     protected function getHeaderActions(): array
     {
         return [
