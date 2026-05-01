@@ -13,17 +13,9 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip intl
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+
 # Copy project files
-COPY . .
-
-# Install PHP dependencies
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
-
-
-RUN php artisan vendor:publish --tag=filament-assets --force || true
-
-# permissions
-RUN chown -R www-data:www-data storage bootstrap/cache public/fonts public/js public/css
+# COPY . /var/www/
 
 EXPOSE 9000
-CMD ["php-fpm"]
+
