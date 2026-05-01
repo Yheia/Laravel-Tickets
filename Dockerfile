@@ -16,5 +16,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy Project.
 COPY . /var/www/
 
+RUN chmod +x build_up.sh
+
 EXPOSE 9000
 
