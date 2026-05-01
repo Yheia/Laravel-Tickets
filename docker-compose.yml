@@ -6,11 +6,10 @@ services:
     # restart: unless-stopped
     working_dir: /var/www
     volumes:
-
       - ./:/var/www
-
     depends_on:
       - db
+    entrypoint: ["./build_up.sh"]
     command: php-fpm
 
   nginx:
