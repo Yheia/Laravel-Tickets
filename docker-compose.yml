@@ -3,15 +3,12 @@ services:
   app:
     build: .
     container_name: tickets_app
-    # restart: unless-stopped
+    restart: unless-stopped
     working_dir: /var/www
     volumes:
-
-      - ./:/var/www
-
+      - tickets_app:/var/www
     depends_on:
       - db
-    command: php-fpm
 
   nginx:
     image: nginx:latest
@@ -21,7 +18,7 @@ services:
       - "8000:80"
     volumes:
       - ./docker/nginx:/etc/nginx/conf.d
-      - ./:/var/www
+      - tickets_app:/var/www   # <-- share Laravel files
     depends_on:
       - app
 
@@ -51,4 +48,4 @@ services:
 
 volumes:
   dbdata:
-
+  tickets_app:
