@@ -18,7 +18,7 @@ services:
       - "8000:80"
     volumes:
       - ./docker/nginx:/etc/nginx/conf.d
-      - tickets_app:/var/www   # <-- share Laravel files
+      - tickets_app:/var/www  
     depends_on:
       - app
 
