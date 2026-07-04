@@ -48,4 +48,10 @@ public function assignedSupport()
 {
     return $this->belongsTo(User::class, 'assigned_to');
 }
+
+public function comments()
+{
+    return $this->hasMany(TicketComment::class);
+}
+
 }

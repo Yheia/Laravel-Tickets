@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\Users\Pages;
 
+use App\Filament\Imports\UserImporter;
 use App\Filament\Resources\Users\UserResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Actions\ImportAction;
 
 class ListUsers extends ListRecords
 {

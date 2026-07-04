@@ -58,11 +58,13 @@ class TicketResource extends Resource
         }
 
         if ($user->isSectoradmin()) {
-            return $query->where('sector', $user->sector || 'sector', 'general');
+            return $query->where('sector', $user->sector || 'sector', 'general')
+                ->orWhere('user_id', $user->id);
         }
 
         if ($user->isSupport()) {
-            return $query->where('assigned_to', $user->id);
+            return $query->where('assigned_to', $user->id) 
+                ->orWhere('user_id', $user->id);
         }
 
         return $query->where('user_id', $user->id);
@@ -70,7 +72,7 @@ class TicketResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [  \App\Filament\Resources\TicketResource\RelationManagers\CommentsRelationManager::class,];
     }
 
     public static function getPages(): array

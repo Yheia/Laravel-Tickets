@@ -10,7 +10,9 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ExportAction;
+use Filament\Actions\ImportAction;
 use Filament\Actions\ExportBulkAction;
+use Illuminate\Database\Eloquent\Builder;
 
 class UsersTable
 {
@@ -47,6 +49,21 @@ class UsersTable
                     ->label(__('Sector'))
                     ->searchable()
                     ->formatStateUsing(fn ($state) => __($state)),
+                TextColumn::make('assigned_tickets_count')
+                    ->label(__('Closed / Assigned'))
+                    ->counts([
+                        'assignedTickets',
+                        'assignedTickets as closed_tickets_count' => fn (Builder $query) => $query->where('status', 'closed'),
+                    ])
+                   ->getStateUsing(function ($record) {
+                        if (! in_array($record->role, ['support', 'sectoradmin'])) {
+                            return null;
+                        }
+                        return "{$record->closed_tickets_count} / {$record->assigned_tickets_count}";
+                 })
+                    ->toggleable()
+                    ->alignCenter(),
+
             ])
             ->filters([
                 //
@@ -54,8 +71,15 @@ class UsersTable
             ->headerActions([
                 ExportAction::make('export')
                     ->label(__('Export Users'))
-                    ->icon('heroicon-o-document-arrow-up')
+                    ->icon('heroicon-o-document-arrow-down')
                     ->exporter(ExportsUserExporter::class),
+                ImportAction::make('import')
+                    ->label(__('Import Users'))
+                    ->icon('heroicon-o-document-arrow-up')
+                    ->importer(\App\Filament\Imports\UserImporter::class)
+                    ->fileRules(['max:2048'])
+                    ->maxRows(1000)
+                    ->visible(fn () => auth()->user()->isSectoradmin() || auth()->user()->isSupervisor()),
             ])
             ->recordActions([
                 EditAction::make(),
@@ -68,6 +92,7 @@ class UsersTable
                         ->label(__('Export Selected'))
                         ->icon('heroicon-o-document-arrow-up')
                         ->exporter(ExportsUserExporter::class),
+                 
                 ]),
             ]);
     }

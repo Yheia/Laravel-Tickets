@@ -12,8 +12,8 @@ class UserForm
     public static function configure(Schema $schema): Schema
 {
     $user = auth()->user();
-    $operation = $schema->getOperation(); // 'create' or 'edit'
-    $record = $schema->getRecord();       // null on create
+    $operation = $schema->getOperation(); 
+    $record = $schema->getRecord();       
 
     $roleOptions = [
         'user'        => __('User'),
@@ -30,7 +30,6 @@ class UserForm
         ];
     }
 
-    // Sectoradmin editing their own record: lock the role field entirely
     $roleIsLocked = $user->isSectoradmin()
         && $operation === 'edit'
         && $record?->id === $user->id;
@@ -65,7 +64,6 @@ class UserForm
             ->dehydrated(! $roleIsLocked)  //  don't submit it at all if locked
             ->required(),
 
-        // Replace disabled()->dehydrated() with hidden() + Hidden field
         Select::make('sector')
             ->label(__('Sector'))
             ->options([
@@ -79,7 +77,7 @@ class UserForm
 
         \Filament\Forms\Components\Hidden::make('sector')
             ->default($user->isSectoradmin() ? $user->sector : null)
-            ->visible($user->isSectoradmin()),   // silently carries the value
+            ->visible($user->isSectoradmin()),  
     ]);
 }
 }

@@ -7,6 +7,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
+use App\Models\Ticket;
 
 
 class TicketForm
@@ -30,20 +31,25 @@ class TicketForm
                     ->label(__('Title'))
                     ->required()
                     ->columnSpanFull()
+                    ->disabled(fn (?Ticket $record) => auth()->user()->isSupport() && auth()->user()->id !== $record?->user_id && $record?->user_id !== null) 
                     ->rules(['min:20', 'max:255']),
                 Textarea::make('description')
                     ->label(__('Description'))
                     ->required()
+                    ->disabled(fn () => auth()->user()->isSupport() )
                     ->columnSpanFull()
+                    ->disabled(fn (?Ticket $record) => auth()->user()->isSupport() && auth()->user()->id !== $record?->user_id && $record?->user_id !== null) 
                     ->rules(['min:75', 'max:1000']),
                 FileUpload::make('image')
                     ->label(__('Image'))    
                     ->image()->imagePreviewHeight('200')
                     ->maxSize(4096)
                     ->downloadable()
+                    ->disabled(fn (?Ticket $record) => auth()->user()->isSupport() && auth()->user()->id !== $record?->user_id && $record?->user_id !== null) 
                     ->openable(),
                 Select::make('sector')
                     ->label(__('Sector'))
+                    ->disabled(fn (?Ticket $record) => auth()->user()->isSupport() && auth()->user()->id !== $record?->user_id && $record?->user_id !== null) 
                     ->options([
                         'Network and Infrastructure' => __('Network and Infrastructure'),
                         'Portal and site'            => __('Portal and site'),
@@ -63,6 +69,7 @@ class TicketForm
                     ->visible(fn () => auth()->user()->isSupport() || auth()->user()->isSupervisor() || auth()->user()->isSectoradmin())
                     ->required(),
                 Select::make('faculty')
+                    ->disabled(fn (?Ticket $record) => auth()->user()->isSupport() && auth()->user()->id !== $record?->user_id && $record?->user_id !== null) 
                     ->label(__('Faculty'))
                     ->options([
                         'Faculty of Education'                           => __('Faculty of Education'),
@@ -92,6 +99,7 @@ class TicketForm
                         'high'   => __('High'),
                     ])
                     ->default('medium')
+                    ->disabled(fn (?Ticket $record) => auth()->user()->isSupport() && auth()->user()->id !== $record?->user_id && $record?->user_id !== null)
                     ->visible(fn () => auth()->user()->isSupervisor() || auth()->user()->isSectoradmin())
                     ->required(),
             ]);

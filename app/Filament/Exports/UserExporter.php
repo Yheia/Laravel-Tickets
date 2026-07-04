@@ -7,6 +7,7 @@ use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\Exports\Exporter;
 use Filament\Actions\Exports\Models\Export;
 use Illuminate\Support\Number;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserExporter extends Exporter
 {
@@ -15,15 +16,28 @@ class UserExporter extends Exporter
     public static function getColumns(): array
     {
         return [
-            ExportColumn::make('id')
-                ->label('ID'),
+            // ExportColumn::make('id')
+            //     ->label('ID'),
             ExportColumn::make('name')->label('Name'),
             ExportColumn::make('email')->label('Email'),
             ExportColumn::make('created_at')->label('Created At'),
             ExportColumn::make('updated_at')->label('Updated At'),
             ExportColumn::make('role')->label('Role'),
             ExportColumn::make('sector')->label('Sector'),
-        ];
+            ExportColumn::make('assigned_tickets_count')
+            ->label(__('Closed / Assigned'))
+            ->counts([
+                'assignedTickets',
+                'assignedTickets as closed_tickets_count' => fn (Builder $query) => $query->where('status', 'closed'),
+            ])
+            ->state(function ($record) {
+                if (! in_array($record->role, ['support', 'sectoradmin'])) {
+                    return null;
+                }
+
+                return "{$record->closed_tickets_count} / {$record->assigned_tickets_count}";
+            }),
+                ];
     }
 
     public static function getCompletedNotificationBody(Export $export): string
