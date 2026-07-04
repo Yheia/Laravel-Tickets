@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('assigned_to')->nullable()->constrained('users')->nullOnDelete();
             $table->string('title');
             $table->text('description');
-            $table->string('image')->nullable();
+            $table->json('image')->nullable();
             $table->enum('sector', ['Network and Infrastructure', 'Portal and site', 'Complain','general'])->default('general');
             $table->enum('status', ['open', 'in_progress', 'closed'])->default('open');
             $table->enum('priority', ['low', 'medium', 'high'])->default('medium');

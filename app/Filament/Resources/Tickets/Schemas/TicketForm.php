@@ -43,6 +43,8 @@ class TicketForm
                 FileUpload::make('image')
                     ->label(__('Image'))    
                     ->image()->imagePreviewHeight('200')
+                     ->multiple()
+                     ->maxFiles(3)
                     ->maxSize(4096)
                     ->downloadable()
                     ->disabled(fn (?Ticket $record) => auth()->user()->isSupport() && auth()->user()->id !== $record?->user_id && $record?->user_id !== null) 

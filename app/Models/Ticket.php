@@ -18,23 +18,33 @@ class Ticket extends Model
         'sector',
         'faculty',
     ];
+    protected function casts()
+{
+    return [
+        'image' => 'array'
+    ];
+}
 
-
-    protected static function booted(): void
+  protected static function booted(): void
 {
     static::deleting(function ($ticket) {
         if ($ticket->image) {
-                    Storage::disk('local')->delete($ticket->image);
-
+            Storage::disk('local')->delete($ticket->image);
         }
     });
+
     static::updating(function ($ticket) {
-    
-    if ($ticket->isDirty('image') && $ticket->getOriginal('image')) {
-        
-        Storage::disk('local')->delete($ticket->getOriginal('image'));
-    }
-});
+        if ($ticket->isDirty('image')) {
+            $original = $ticket->getOriginal('image') ?? [];
+            $new = $ticket->image ?? [];
+
+            $removed = array_diff($original, $new);
+
+            if (! empty($removed)) {
+                Storage::disk('local')->delete($removed);
+            }
+        }
+    });
 }
 
 
